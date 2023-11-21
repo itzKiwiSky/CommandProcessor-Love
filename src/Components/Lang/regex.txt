@@ -1,0 +1,3 @@
+"<-%s?#?%w+" // find code with <- #name
+"<-%s?%w+"
+"[<-]+%s?"
