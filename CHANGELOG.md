@@ -8,6 +8,7 @@
     + More math functions
         + $abs
         + $cos
+        + $sin
     + Programs
         + Save | Save a script to disk
         + Load | Load a script from disk
