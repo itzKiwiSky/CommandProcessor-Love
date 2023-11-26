@@ -1,6 +1,3 @@
-return {
-    name = "pow",
-    run = function(_x, _y)
-        return math.pow(_x, _y)
-    end
-}
+return function(_val1, _val2)
+    ram.buffer[5] = math.pow(_val1, _val2)
+end

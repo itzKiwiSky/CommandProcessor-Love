@@ -1,20 +1,10 @@
 local serializator = require 'src.Components.Lang.Serialization'
 local interpreter = {}
-interpreter.code = {}
 interpreter.bytecodes = {}
 interpreter.functions = {}
-interpreter.line = 1
 
 local function _runByteCode(_event)
-    for f = 1, #interpreter.functions, 1 do
-        if _event.name == interpreter.functions[f].name then
-            local sucess, err = pcall(interpreter.functions[f].run, unpack(_event.args))
-            print(sucess, err)
-            if not sucess then
-                error(err)
-            end
-        end
-    end
+    pcall(interpreter.functions[_event.name], unpack(_event.args))
 end
 
 local function _parse(_code)
@@ -60,22 +50,21 @@ local function _parse(_code)
 end
 
 local function _loadFunctions(_path)
-    local tree = {}
-    for _, file in ipairs(love.filesystem.getDirectoryItems(_path)) do
-        local filename = _path .. "/" .. file
-        if love.filesystem.getInfo(filename).type == "directory" then
-            tree = _loadFunctions(filename)
-        elseif file:match(".lua") == ".lua" then
-            table.insert(tree, require(filename:gsub(".lua", "")))
-            print("loaded : " .. file)
+    local items = love.filesystem.getDirectoryItems(_path)
+    for item = 1, #items, 1 do
+        local path = _path .. "/" .. items[item]
+        if love.filesystem.getInfo(path).type == "directory" then
+            _loadFunctions(path)
+        end
+        if love.filesystem.getInfo(path).type == "file" then
+            interpreter.functions[string.lower(items[item]:gsub(".lua", ""))] = require(path:gsub(".lua", ""))
+            print("Loaded : " .. items[item])
         end
     end
-    return tree
 end
 
 function interpreter.initialize()
-    --table.insert(interpreter.functions, require("src/Components/Lang/Functions/" .. path[p]:gsub(".lua", "")))
-    interpreter.functions = _loadFunctions("src/Components/Lang/Functions")
+    _loadFunctions("src/Components/Lang/Functions")
 end
 
 function interpreter.jit(_code)

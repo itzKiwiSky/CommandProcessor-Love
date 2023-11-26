@@ -1,6 +1,3 @@
-return {
-    name = "writeln",
-    run = function(...)
-        terminalapi.print(table.concat({...}, " ") .. "\n")
-    end
-}
+return function(...)
+    terminalapi.print(table.concat({...}, " ") .. "\n")
+end

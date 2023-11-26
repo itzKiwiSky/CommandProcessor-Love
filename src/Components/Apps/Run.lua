@@ -2,11 +2,13 @@ local interpreter = require 'src.Components.Lang.Interpreter'
 
 return {
     name = "run",
-    description = "run the code sotred on memory",
+    description = "run the code stored on memory",
     usage = "run",
     callback = function()
         if #ram.buffer[2] > 0 then
-            interpreter.run(table.concat(ram.buffer[2], "\n"))
+            for c = 1, #ram.buffer[2], 1 do
+                interpreter.jit(ram.buffer[2][c])
+            end
             ram.buffer[2] = {}
         else
             terminalapi.printf("No code to run")
