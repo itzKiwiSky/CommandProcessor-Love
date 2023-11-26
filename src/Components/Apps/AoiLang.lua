@@ -2,7 +2,9 @@ local interpreter = require 'src.Components.Lang.Interpreter'
 
 return {
     name = "aoilang",
-    callback = function(_file)
-        interpreter:run(love.filesystem.read(_file))
+    description = "Aoilang compiler",
+    usage = "aoilang <input-file> <output-file>",
+    callback = function(_inputFile, _outputFile)
+
     end
 }

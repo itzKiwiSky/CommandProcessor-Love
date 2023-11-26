@@ -12,18 +12,12 @@ function playstate:enter()
     ram.buffer[2] = {}      -- commands accumulator
     ram.buffer[3] = {}      -- var stack
     ram.buffer[4] = {}      -- function stack
-    ram.buffer[5] = nil     -- return stack
-    ram.buffer[6] = {
-        {
-            name = "shaders",
-            value = true
-        }
-    }
+    ram.buffer[5] = ""     -- return stack
+    ram.buffer[6] = ""      -- command buffer
 
     effect = moonshine(moonshine.effects.glow).chain(moonshine.effects.crt).chain(moonshine.effects.scanlines)
     effect.scanlines.opacity = 0.4
 
-    command = ""
 
     vcr = love.graphics.newFont("resources/fonts/vcr.ttf", 20)
     headupdaisy = love.graphics.newFont("resources/fonts/headupdaisy.ttf", 20)
@@ -33,7 +27,7 @@ function playstate:enter()
     cover = love.graphics.newImage("resources/images/cover.png")
 
     term:set_cursor_color(terminal.schemes.basic["7"])
-    interpreter:init()
+    interpreter.initialize()
     print("--------------------------")
     parser.init()
     print("/--------------------------\\")
@@ -41,6 +35,14 @@ function playstate:enter()
     print("|           v0.0.1         |")
     print("\\--------------------------/")
 
+    terminalapi.print("/--------------------------\\\n")
+    terminalapi.print("|        CherrySystem      |\n")
+    terminalapi.print("|           v0.0.1         |\n")
+    terminalapi.print("\\--------------------------/\n")
+    terminalapi.print("type 'help' to see all available commands\n")
+    terminalapi.print("\n")
+
+    love.keyboard.setKeyRepeat(true)
 end
 
 function playstate:draw()
@@ -70,7 +72,7 @@ end
 
 function playstate:textinput(t)
     if ram.buffer.state == "static" then
-        command = command .. t
+        ram.buffer[6] = ram.buffer[6] .. t
         term:print(t)
     end
 end
@@ -78,9 +80,9 @@ end
 function playstate:keypressed(k)
     if ram.buffer.state == "static" then
         if k == "backspace" then
-            local byteoffset = utf8.offset(command, -1)
+            local byteoffset = utf8.offset(ram.buffer[6], -1)
             if byteoffset then
-                command = string.sub(command, 1, byteoffset - 1)
+                ram.buffer[6] = string.sub(ram.buffer[6], 1, byteoffset - 1)
             end
             if term.cursor_x > 1 then
                 term.cursor_x = term.cursor_x - 1
@@ -90,8 +92,8 @@ function playstate:keypressed(k)
         if k == "return" then
             term.cursor_x = 1
             term:print("\n")
-            parser.parse(string.lower(command))
-            command = ""
+            parser.parse(string.lower(ram.buffer[6]))
+            ram.buffer[6] = ""
         end
     elseif ram.buffer.state == "immediate" then
 

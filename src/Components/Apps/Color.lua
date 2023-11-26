@@ -40,6 +40,7 @@ local colorName = {
 return {
     name = "color",
     description = "change text and background color",
+    usage = "color <<fg-coolor><bgcolor>>",
     callback = function(_color)
         if _color == "help" then
             local lastBgColor = term.cursor_backcolor
