@@ -12,7 +12,7 @@ function playstate:enter()
     ram.buffer[2] = {}      -- commands accumulator
     ram.buffer[3] = {}      -- var stack
     ram.buffer[4] = {}      -- function stack
-    ram.buffer[5] = ""     -- return stack
+    ram.buffer[5] = ""      -- return stack
     ram.buffer[6] = ""      -- command buffer
 
     effect = moonshine(moonshine.effects.glow).chain(moonshine.effects.crt).chain(moonshine.effects.scanlines)
@@ -46,12 +46,12 @@ function playstate:enter()
 end
 
 function playstate:draw()
-    effect(function()
+    --effect(function()
         term:draw()
-        love.graphics.setColor(1, 1, 1, 0.6)
-        love.graphics.draw(cover, 0, 0)
-        love.graphics.setColor(1, 1, 1, 1)
-    end)
+        --love.graphics.setColor(1, 1, 1, 0.6)
+        --love.graphics.draw(cover, 0, 0)
+        --love.graphics.setColor(1, 1, 1, 1)
+    --end)
     --love.graphics.print(term.cursor_x, 0, 0)
     --love.graphics.print(term.cursor_y, 100, 0)
     --love.graphics.print(debug.formattable(term.buffer), 0, 30)

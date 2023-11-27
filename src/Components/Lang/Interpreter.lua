@@ -1,4 +1,3 @@
-local serializator = require 'src.Components.Lang.Serialization'
 local interpreter = {}
 interpreter.bytecodes = {}
 interpreter.functions = {}
